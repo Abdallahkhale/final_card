@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Wedding Invitation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Playfair Display', serif;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    body {
+      background-color: #ffffff;
+      color: #5a5a5a;
+      line-height: 1.6;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw; /* Use viewport width */
+      min-height: 100vh;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+    }
+    .page.active {
+      display: flex;
+      opacity: 1;
+    }
+    .envelope-page {
+      background: linear-gradient(135deg, #f5e1e5 0%, #f2d0d6 50%, #f5e1e5 100%);
+      cursor: pointer;
+      height: 100vh;
+    }
+    .envelope-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .to-my-text {
+      position: absolute;
+      left: 2%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #b67f91;
+    }
+    .invitation-title {
+      font-size: 2.8rem;
+      color: #9a7b69;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    }
+    .wax-seal {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, #e8bcc4 60%, #d4a88e 100%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+      margin: 20px 0;
+      transition: transform 0.3s ease;
+    }
+    .wax-seal:hover {
+      transform: scale(1.05);
+    }
+    .wax-seal:before {
+      content: "❀";
+      font-size: 50px;
+      color: #b67f91;
+    }
+    .tap-instruction {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      color: #b67f91;
+      margin-top: 20px;
+      opacity: 0.9;
+    }
+    .video-container {
+      width: 100vw; /* Use viewport width */
+      height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background-color: #ffffff;
+      margin: 0; /* Remove margin */
+      padding: 0; /* Remove padding */
+      max-width: none; /* Ensure no max-width constraints */
+    }
+    .wedding-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* Added additional info section below video */
+    .additional-info {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 100px;
+    }
+    
+    .additional-info h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: #9a7b69;
+      margin-bottom: 15px;
+    }
+    
+    .additional-info p {
+      font-size: 1.2rem;
+      color: #5a5a5a;
+      margin-bottom: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .video-container {
+        height: 80vh;
+        width: 100vw; /* Ensure full width on mobile */
+      }
+      .wedding-video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      #photo {
+        padding-bottom: 90px;
+        width: 100vw; /* Ensure full width on mobile */
+      }
+    }
+    
+    .location-button {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      background-color: rgba(255,255,255,0.8);
+      color: #9a7b69;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      cursor: pointer;
+      border: 1px solid #f2d0d6;
+      backdrop-filter: blur(5px);
+      z-index: 10;
+      text-decoration: none;
+    }
+    .location-button:hover {
+      transform: scale(1.1);
+      background-color: rgba(255,255,255,0.9);
+    }
+    .location-icon {
+      font-size: 18px;
+      margin-bottom: 3px;
+      color: #9a7b69;
+    }
+    .location-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9a7b69;
+    }
+    #photo {
+      padding: 0;
+      margin: 0;
+      justify-content: flex-start;
+      overflow-y: auto;
+      position: relative;
+      width: 100vw; /* Full viewport width */
+      max-width: 100vw; /* Ensure no max-width constraints */
+    }
+    .audio-player {
+      display: none;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- First Page -->
+    <div class="page envelope-page active" id="envelope" onclick="showPage('photo')">
+      <div class="envelope-content">
+        <div class="to-my-text">To my Best Friend</div>
+        <h1 class="invitation-title">Our Wedding</h1>
+        <div class="wax-seal"></div>
+        <p class="tap-instruction">Tap to open</p>
+      </div>
+    </div>
+
+    <!-- Second Page -->
+    <div class="page" id="photo">
+      <div class="video-container">
+        <video class="wedding-video" muted playsinline>
+          <source src="finall.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      
+      <!-- Audio will play only once (no loop attribute) -->
+      <audio id="background-music" class="audio-player">
+        <source src="final_audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <a href="https://maps.app.goo.gl/kYb1gab6JG6zoV8A7?g_st=aw" target="_blank" class="location-button">
+        <div class="location-icon">🗺️</div>
+        <div class="location-text">Location</div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    let videoPlayed = false;
+    let audioPlayed = false;
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(function(pg) {
+        pg.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+
+      const audio = document.getElementById('background-music');
+      const video = document.querySelector('.wedding-video');
+
+      if (pageId === 'photo' && !videoPlayed) {
+        // Play video only once
+        video.play().catch(() => {
+          console.log("Initial play failed, waiting for user interaction");
+          // For mobile devices that require interaction
+          document.addEventListener('click', function playVideoOnce() {
+            if (!videoPlayed) {
+              video.play().catch(e => console.log("Play after click failed:", e));
+              videoPlayed = true;
+            }
+            document.removeEventListener('click', playVideoOnce);
+          }, { once: true });
+        });
+        videoPlayed = true;
+
+        // Try to play audio once
+        if (!audioPlayed) {
+          audio.play().catch(e => {
+            console.log("Audio play failed:", e);
+          });
+          audioPlayed = true;
+        }
+      } else {
+        // Pause media if navigating away
+        if (!audio.paused) audio.pause();
+        if (video && !video.paused) video.pause();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Force the page to take full width
+      document.body.style.width = '100vw';
+      document.documentElement.style.width = '100vw';
+      
+      const video = document.querySelector('.wedding-video');
+      
+      // Make sure video is visible by logging dimensions
+      console.log("Video dimensions:", video.offsetWidth, video.offsetHeight);
+      
+      // Ensure video plays when it becomes visible
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !videoPlayed) {
+            video.play().catch(e => console.log("Play on visible failed:", e));
+            videoPlayed = true;
+          }
+        });
+      });
+      
+      observer.observe(video);
+      
+      // Remove loop - video will play only once
+      video.addEventListener('ended', () => {
+        console.log("Video ended");
+        // We're not restarting the video, so it plays only once
+      });
+    });
+  </script>
+</body>
+</html>
